@@ -19,7 +19,7 @@ describe('createAppConfig', () => {
         CAR_ID: '1',
         BATTERY_COUNT: '2',
         SNAPSHOT_INTERVAL_MS: '10000',
-        MQTT_STALE_AFTER_MS: '30000',
+        STALE_AFTER_MS: '30000',
       }),
     ).toEqual({
       mqtt: {
