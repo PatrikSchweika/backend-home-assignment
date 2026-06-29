@@ -25,7 +25,7 @@ Keep business rules inside feature folders. Shared infrastructure should stay ge
 
 ## Runtime Notes
 
-Config values come from `.env.development` or `.env.test`, then are validated with Zod. Do not add localhost defaults directly in code.
+Config values come from `.env.local` or `.env`, then are validated with Zod. Do not add defaults directly in code.
 
 Run services with:
 
@@ -42,6 +42,6 @@ pnpm all
 Run verification with:
 
 ```sh
-pnpm check
+pnpm biome
 pnpm test
 ```
