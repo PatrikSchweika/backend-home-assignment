@@ -8,10 +8,10 @@ export type CarStateAggregatorOptions = {
 }
 
 export type CarStateAggregator = {
-  ingest(event: CarStateEvent, receivedAtMs: number): void
+  add(event: CarStateEvent, receivedAtMs: number): void
   createSnapshot(nowMs: number): CarStateSnapshot | null
   isStale(nowMs: number): boolean
-  isComplete(): boolean
+  hasAllValues(): boolean
 }
 
 type LatestCarState = {
@@ -32,7 +32,7 @@ export const createCarStateAggregator = (
     batteryCapacityByIndex: new Map(),
   }
 
-  const ingest = (event: CarStateEvent, receivedAtMs: number): void => {
+  const add = (event: CarStateEvent, receivedAtMs: number): void => {
     if (event.carId !== options.carId) {
       return
     }
@@ -62,7 +62,7 @@ export const createCarStateAggregator = (
   }
 
   const createSnapshot = (nowMs: number): CarStateSnapshot | null => {
-    if (!isComplete() || isStale(nowMs)) {
+    if (!hasAllValues() || isStale(nowMs)) {
       return null
     }
 
@@ -96,7 +96,7 @@ export const createCarStateAggregator = (
     )
   }
 
-  const isComplete = (): boolean => {
+  const hasAllValues = (): boolean => {
     return (
       state.latitude !== undefined &&
       state.longitude !== undefined &&
@@ -139,9 +139,9 @@ export const createCarStateAggregator = (
   }
 
   return {
-    ingest,
+    add,
     createSnapshot,
     isStale,
-    isComplete,
+    hasAllValues,
   }
 }

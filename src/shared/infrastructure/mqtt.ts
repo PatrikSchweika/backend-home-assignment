@@ -27,18 +27,20 @@ export const createMqttTelemetrySubscriber = async (
   client.on('message', options.onMessage)
 
   return {
-    close: () =>
-      new Promise((resolve, reject) => {
-        client.end(false, {}, (error) => {
-          if (error) {
-            reject(error)
-            return
-          }
-
-          resolve()
-        })
-      }),
+    close: () => closeMqtt(client),
   }
+}
+const closeMqtt = (client: MqttClient): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    client.end(false, {}, (error) => {
+      if (error) {
+        reject(error)
+        return
+      }
+
+      resolve()
+    })
+  })
 }
 
 const waitForConnect = (client: MqttClient): Promise<void> => {

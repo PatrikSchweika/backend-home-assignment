@@ -3,7 +3,7 @@ import { createMqttTelemetrySubscriber } from '../../shared/infrastructure/mqtt'
 import { createRabbitMqPublisher } from '../../shared/infrastructure/rabbitmq'
 import { CarStateSnapshotSchema } from '../../shared/schemas/car-state-snapshot'
 import { createCarStateAggregator } from './aggregator'
-import { parseTelemetryMessage } from './mqtt-parser'
+import { parseCarStateEvent } from './mqtt-parser'
 
 export const worker = async (): Promise<void> => {
   const appConfig = loadAppConfig()
@@ -22,13 +22,13 @@ export const worker = async (): Promise<void> => {
     username: appConfig.mqtt.username,
     password: appConfig.mqtt.password,
     onMessage: (topic, payload) => {
-      const event = parseTelemetryMessage(topic, payload)
+      const event = parseCarStateEvent(topic, payload)
 
       if (event === null) {
         return
       }
 
-      aggregator.ingest(event, Date.now())
+      aggregator.add(event, Date.now())
     },
   })
 

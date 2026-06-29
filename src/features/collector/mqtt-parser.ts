@@ -18,11 +18,11 @@ export type CarStateEvent =
       value: number
     }
 
-export const parseTelemetryMessage = (
+export const parseCarStateEvent = (
   topic: string,
   payload: Buffer | string,
 ): CarStateEvent | null => {
-  const parsedTopic = telemetryTopicSchema.safeParse(topic.trim().split('/'))
+  const parsedTopic = topicSchema.safeParse(topic.trim().split('/'))
 
   if (!parsedTopic.success) {
     return null
@@ -94,7 +94,7 @@ export const convertSpeedToKmh = (speedMetersPerSecond: number): number => {
   return speedMetersPerSecond * 3.6
 }
 
-const payloadValueEnvelopeSchema = z.object({
+const payloadSchema = z.object({
   value: z.unknown(),
 })
 
@@ -103,7 +103,7 @@ const parsePayloadValue = (payload: Buffer | string): unknown => {
 
   try {
     const parsedPayload = JSON.parse(payloadText)
-    const envelope = payloadValueEnvelopeSchema.safeParse(parsedPayload)
+    const envelope = payloadSchema.safeParse(parsedPayload)
 
     return envelope.success ? envelope.data.value : payloadText
   } catch {
@@ -126,12 +126,12 @@ const gearPayloadSchema = z.union([
   }),
 ])
 
-const topicIntegerStringSchema = z.coerce.number().int().nonnegative()
+const topicIntegerSchema = z.coerce.number().int().nonnegative()
 
 const locationTopicSchema = z
   .tuple([
     z.literal('car'),
-    topicIntegerStringSchema,
+    topicIntegerSchema,
     z.literal('location'),
     z.enum(['latitude', 'longitude']),
   ])
@@ -139,8 +139,8 @@ const locationTopicSchema = z
     return { kind: locationKind, carId }
   })
 
-const scalarTopicSchema = z
-  .tuple([z.literal('car'), topicIntegerStringSchema, z.enum(['speed', 'gear'])])
+const speedOrGearTopicSchema = z
+  .tuple([z.literal('car'), topicIntegerSchema, z.enum(['speed', 'gear'])])
   .transform(([, carId, kind]) => {
     return { kind, carId }
   })
@@ -148,9 +148,9 @@ const scalarTopicSchema = z
 const batteryTopicSchema = z
   .tuple([
     z.literal('car'),
-    topicIntegerStringSchema,
+    topicIntegerSchema,
     z.literal('battery'),
-    topicIntegerStringSchema,
+    topicIntegerSchema,
     z.enum(['soc', 'capacity']),
   ])
   .transform(([, carId, , batteryIndex, batteryKind]) => {
@@ -161,4 +161,4 @@ const batteryTopicSchema = z
     }
   })
 
-const telemetryTopicSchema = z.union([locationTopicSchema, scalarTopicSchema, batteryTopicSchema])
+const topicSchema = z.union([locationTopicSchema, speedOrGearTopicSchema, batteryTopicSchema])

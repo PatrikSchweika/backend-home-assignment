@@ -21,7 +21,7 @@ describe('createCarStateAggregator', () => {
       staleAfterMs: 15_000,
     })
 
-    aggregator.ingest({ kind: 'latitude', carId: 1, value: 50.087 }, 1_000)
+    aggregator.add({ kind: 'latitude', carId: 1, value: 50.087 }, 1_000)
 
     expect(aggregator.createSnapshot(5_000)).toBeNull()
   })
@@ -34,7 +34,7 @@ describe('createCarStateAggregator', () => {
     })
 
     for (const event of baseEvents) {
-      aggregator.ingest(event, 1_000)
+      aggregator.add(event, 1_000)
     }
 
     expect(aggregator.createSnapshot(5_000)).toEqual({
@@ -57,12 +57,12 @@ describe('createCarStateAggregator', () => {
     })
 
     for (const event of baseEvents) {
-      aggregator.ingest(event, 1_000)
+      aggregator.add(event, 1_000)
     }
 
     expect(aggregator.createSnapshot(17_001)).toBeNull()
 
-    aggregator.ingest({ kind: 'speed', carId: 1, value: 12 }, 18_000)
+    aggregator.add({ kind: 'speed', carId: 1, value: 12 }, 18_000)
 
     expect(aggregator.createSnapshot(20_000)).toMatchObject({
       carId: 1,

@@ -46,6 +46,8 @@ export const worker = async (): Promise<void> => {
     },
   })
 
+  console.info(`Writer consuming ${appConfig.rabbitmq.queueName}`)
+
   const shutdown = async (): Promise<void> => {
     await consumer.close()
     await db.destroy()
@@ -57,6 +59,4 @@ export const worker = async (): Promise<void> => {
   process.once('SIGTERM', () => {
     shutdown().finally(() => process.exit(0))
   })
-
-  console.info(`Writer consuming ${appConfig.rabbitmq.queueName}`)
 }

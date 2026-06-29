@@ -11,10 +11,14 @@ export type RabbitMqConsumer = {
   close(): Promise<void>
 }
 
-export const createRabbitMqPublisher = async (options: {
+interface CreateRabbitMqPublisherParams {
   url: string
   queueName: string
-}): Promise<RabbitMqPublisher> => {
+}
+
+export const createRabbitMqPublisher = async (
+  options: CreateRabbitMqPublisherParams,
+): Promise<RabbitMqPublisher> => {
   const connection = await amqp.connect(options.url)
   const channel = await connection.createChannel()
 
@@ -36,12 +40,16 @@ export const createRabbitMqPublisher = async (options: {
   }
 }
 
-export const createRabbitMqConsumer = async (options: {
+interface CreateRabbitMqConsumerParams {
   url: string
   queueName: string
   prefetch: number
   handleMessage(content: Buffer): Promise<QueueMessageResult>
-}): Promise<RabbitMqConsumer> => {
+}
+
+export const createRabbitMqConsumer = async (
+  options: CreateRabbitMqConsumerParams,
+): Promise<RabbitMqConsumer> => {
   const connection = await amqp.connect(options.url)
   const channel = await connection.createChannel()
 
@@ -53,7 +61,7 @@ export const createRabbitMqConsumer = async (options: {
       return
     }
 
-    const result = await safelyHandleMessage(options.handleMessage, message)
+    const result = await processMessage(options.handleMessage, message)
 
     switch (result) {
       case 'ack':
@@ -73,7 +81,7 @@ export const createRabbitMqConsumer = async (options: {
   }
 }
 
-const safelyHandleMessage = async (
+const processMessage = async (
   handleMessage: (content: Buffer) => Promise<QueueMessageResult>,
   message: ConsumeMessage,
 ): Promise<QueueMessageResult> => {
