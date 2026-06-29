@@ -1,8 +1,8 @@
 import { z } from 'zod'
 import { loadAppConfig } from '../../shared/config'
-import { CarStateSnapshotSchema } from '../../shared/contracts/car-state-snapshot'
 import { createDatabase } from '../../shared/infrastructure/database'
 import { createRabbitMqConsumer } from '../../shared/infrastructure/rabbitmq'
+import { CarStateSnapshotSchema } from '../../shared/schemas/car-state-snapshot'
 import { insertCarStateSnapshot } from './repository'
 
 export const worker = async (): Promise<void> => {

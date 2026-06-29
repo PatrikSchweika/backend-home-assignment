@@ -1,4 +1,4 @@
-import type { CarStateSnapshot } from '../../shared/contracts/car-state-snapshot'
+import type { CarStateSnapshot } from '../../shared/schemas/car-state-snapshot'
 import { type CarStateEvent, convertSpeedToKmh } from './mqtt-parser'
 
 export type CarStateAggregatorOptions = {

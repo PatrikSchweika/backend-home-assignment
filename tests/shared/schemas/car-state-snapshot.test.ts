@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { CarStateSnapshotSchema } from '../../../src/shared/contracts/car-state-snapshot'
+import { CarStateSnapshotSchema } from '../../../src/shared/schemas/car-state-snapshot'
 
 describe('CarStateSnapshotSchema', () => {
   it('accepts a valid versioned car state snapshot', () => {

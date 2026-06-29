@@ -1,7 +1,7 @@
 import { loadAppConfig } from '../../shared/config'
-import { CarStateSnapshotSchema } from '../../shared/contracts/car-state-snapshot'
 import { createMqttTelemetrySubscriber } from '../../shared/infrastructure/mqtt'
 import { createRabbitMqPublisher } from '../../shared/infrastructure/rabbitmq'
+import { CarStateSnapshotSchema } from '../../shared/schemas/car-state-snapshot'
 import { createCarStateAggregator } from './aggregator'
 import { parseTelemetryMessage } from './mqtt-parser'
 

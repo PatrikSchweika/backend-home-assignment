@@ -1,6 +1,6 @@
 import type { Kysely } from 'kysely'
-import type { CarStateSnapshot } from '../../shared/contracts/car-state-snapshot'
 import type { Database } from '../../shared/infrastructure/database'
+import type { CarStateSnapshot } from '../../shared/schemas/car-state-snapshot'
 
 export const insertCarStateSnapshot = async (
   db: Kysely<Database>,

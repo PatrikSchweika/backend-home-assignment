@@ -5,10 +5,7 @@
     "collector": "tsx src/collector.ts",
     "writer": "tsx src/writer.ts",
     "all": "concurrently -n collector,writer -c blue,green \"pnpm collector\" \"pnpm writer\"",
-    "build": "tsc -p tsconfig.build.json",
-    "check": "biome check .",
-    "format": "biome format --write .",
-    "lint": "biome lint .",
+    "build": "tsc -b",
     "biome": "biome check .",
     "biome:fix": "biome check --write .",
     "test": "vitest run"
