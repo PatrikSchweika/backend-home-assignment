@@ -19,7 +19,7 @@ const EnvConfigSchema = z
     CAR_ID: positiveIntegerEnv,
     BATTERY_COUNT: positiveIntegerEnv,
     SNAPSHOT_INTERVAL_MS: positiveIntegerEnv,
-    MQTT_STALE_AFTER_MS: positiveIntegerEnv,
+    STALE_AFTER_MS: positiveIntegerEnv,
   })
   .loose()
 
@@ -68,7 +68,7 @@ export const createAppConfig = (env: DotenvParseOutput): AppConfig => {
       carId: parsedEnv.CAR_ID,
       batteryCount: parsedEnv.BATTERY_COUNT,
       snapshotIntervalMs: parsedEnv.SNAPSHOT_INTERVAL_MS,
-      staleAfterMs: parsedEnv.MQTT_STALE_AFTER_MS,
+      staleAfterMs: parsedEnv.STALE_AFTER_MS,
     },
   }
 }

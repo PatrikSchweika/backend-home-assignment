@@ -74,7 +74,7 @@ values through the runtime environment or a secret manager instead of committing
 | `CAR_ID`               | Yes      | Car id to collect and aggregate.                                   | `1`                                                     |
 | `BATTERY_COUNT`        | Yes      | Number of batteries expected for a complete car state snapshot.    | `2`                                                     |
 | `SNAPSHOT_INTERVAL_MS` | Yes      | Collector snapshot publish interval in milliseconds.               | `5000`                                                  |
-| `MQTT_STALE_AFTER_MS`  | Yes      | Time without MQTT messages after which snapshot publishing pauses. | `15000`                                                 |
+| `STALE_AFTER_MS`       | Yes      | Time without MQTT messages after which snapshot publishing pauses. | `15000`                                                 |
 
 Numeric values are validated as positive integers. URLs, queue names, and snapshot payloads are
 validated with Zod before they are used by the application.
