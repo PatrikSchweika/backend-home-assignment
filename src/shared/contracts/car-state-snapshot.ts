@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod'
 
 export const CarStateSnapshotSchema = z.object({
   version: z.literal(1),
@@ -9,6 +9,6 @@ export const CarStateSnapshotSchema = z.object({
   longitude: z.number(),
   gear: z.number().int().min(0).max(6),
   speed: z.number().nonnegative(),
-});
+})
 
-export type CarStateSnapshot = z.infer<typeof CarStateSnapshotSchema>;
+export type CarStateSnapshot = z.infer<typeof CarStateSnapshotSchema>

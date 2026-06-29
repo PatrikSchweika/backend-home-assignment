@@ -1,7 +1,7 @@
-import {config as loadDotenv, DotenvParseOutput} from "dotenv";
-import { z } from "zod";
+import { type DotenvParseOutput, config as loadDotenv } from 'dotenv'
+import { z } from 'zod'
 
-const positiveIntegerEnv = z.coerce.number().int().positive();
+const positiveIntegerEnv = z.coerce.number().int().positive()
 
 const EnvConfigSchema = z
   .object({
@@ -19,35 +19,33 @@ const EnvConfigSchema = z
     SNAPSHOT_INTERVAL_MS: positiveIntegerEnv,
     MQTT_STALE_AFTER_MS: positiveIntegerEnv,
   })
-  .loose();
+  .loose()
 
 export interface AppConfig {
   mqtt: {
-    url: string;
-    username?: string;
-    password?: string;
-    topic: string;
-  };
+    url: string
+    username?: string
+    password?: string
+    topic: string
+  }
   rabbitmq: {
-    url: string;
-    queueName: string;
-    prefetch: number;
-  };
+    url: string
+    queueName: string
+    prefetch: number
+  }
   database: {
-    url: string;
-  };
+    url: string
+  }
   telemetry: {
-    carId: number;
-    batteryCount: number;
-    snapshotIntervalMs: number;
-    staleAfterMs: number;
-  };
+    carId: number
+    batteryCount: number
+    snapshotIntervalMs: number
+    staleAfterMs: number
+  }
 }
 
-export const createAppConfig = (
-  env: DotenvParseOutput,
-): AppConfig => {
-  const parsedEnv = EnvConfigSchema.parse(env);
+export const createAppConfig = (env: DotenvParseOutput): AppConfig => {
+  const parsedEnv = EnvConfigSchema.parse(env)
 
   return {
     mqtt: {
@@ -70,19 +68,17 @@ export const createAppConfig = (
       snapshotIntervalMs: parsedEnv.SNAPSHOT_INTERVAL_MS,
       staleAfterMs: parsedEnv.MQTT_STALE_AFTER_MS,
     },
-  };
-};
+  }
+}
 
 export const loadAppConfig = (): AppConfig => {
   const result = loadDotenv({
     path: ['.env.local', '.env'],
-  });
+  })
 
   if (result.error !== undefined || result.parsed === undefined) {
-    throw new Error("Config file not found");
+    throw new Error('Config file not found')
   }
 
-  return createAppConfig(result.parsed);
-};
-
-export const APP_CONFIG = loadAppConfig();
+  return createAppConfig(result.parsed)
+}

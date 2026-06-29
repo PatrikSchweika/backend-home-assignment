@@ -1,20 +1,20 @@
-import { ColumnType, Generated, Kysely, PostgresDialect } from "kysely";
-import { Pool } from "pg";
+import { type ColumnType, type Generated, Kysely, PostgresDialect } from 'kysely'
+import { Pool } from 'pg'
 
 type CarStateTable = {
-  id: Generated<number>;
-  car_id: number;
-  time: ColumnType<Date, Date | string, never>;
-  state_of_charge: number;
-  latitude: number;
-  longitude: number;
-  gear: number;
-  speed: number;
-};
+  id: Generated<number>
+  car_id: number
+  time: ColumnType<Date, Date | string, never>
+  state_of_charge: number
+  latitude: number
+  longitude: number
+  gear: number
+  speed: number
+}
 
 export type Database = {
-  car_state: CarStateTable;
-};
+  car_state: CarStateTable
+}
 
 export const createDatabase = (databaseUrl: string): Kysely<Database> => {
   return new Kysely<Database>({
@@ -23,5 +23,5 @@ export const createDatabase = (databaseUrl: string): Kysely<Database> => {
         connectionString: databaseUrl,
       }),
     }),
-  });
-};
+  })
+}
