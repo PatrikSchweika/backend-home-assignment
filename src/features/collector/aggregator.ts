@@ -12,7 +12,6 @@ export type CarStateAggregator = {
   createSnapshot(nowMs: number): CarStateSnapshot | null
   isStale(nowMs: number): boolean
   isComplete(): boolean
-  hasReceivedTelemetry(): boolean
 }
 
 type LatestCarState = {
@@ -107,10 +106,6 @@ export const createCarStateAggregator = (
     )
   }
 
-  const hasReceivedTelemetry = (): boolean => {
-    return state.lastTelemetryAtMs !== undefined
-  }
-
   const hasAllBatteryValues = (): boolean => {
     for (let batteryIndex = 0; batteryIndex < options.batteryCount; batteryIndex += 1) {
       if (
@@ -148,6 +143,5 @@ export const createCarStateAggregator = (
     createSnapshot,
     isStale,
     isComplete,
-    hasReceivedTelemetry,
   }
 }

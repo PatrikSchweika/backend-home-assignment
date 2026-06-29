@@ -31,9 +31,8 @@ export const worker = async (): Promise<void> => {
       aggregator.ingest(event, Date.now())
     },
   })
+
   let isPublishing = false
-  let wasStale = false
-  let isWaitingForTelemetry = false
 
   const interval = setInterval(async () => {
     if (isPublishing) {
@@ -41,28 +40,6 @@ export const worker = async (): Promise<void> => {
     }
 
     const nowMs = Date.now()
-    const hasReceivedTelemetry = aggregator.hasReceivedTelemetry()
-    const isStale = aggregator.isStale(nowMs)
-
-    if (!hasReceivedTelemetry && !isWaitingForTelemetry) {
-      console.info('Waiting for the first MQTT telemetry message.')
-    }
-
-    if (hasReceivedTelemetry && isWaitingForTelemetry) {
-      console.info('MQTT telemetry received; snapshot publishing can start once state is complete.')
-    }
-
-    isWaitingForTelemetry = !hasReceivedTelemetry
-
-    if (hasReceivedTelemetry && isStale && !wasStale) {
-      console.warn('MQTT source is stale; snapshot publishing is paused.')
-    }
-
-    if (hasReceivedTelemetry && !isStale && wasStale) {
-      console.info('MQTT source recovered; snapshot publishing resumed.')
-    }
-
-    wasStale = hasReceivedTelemetry && isStale
 
     const snapshot = aggregator.createSnapshot(nowMs)
     if (snapshot === null) {

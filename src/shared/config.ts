@@ -1,4 +1,6 @@
-import { type DotenvParseOutput, config as loadDotenv } from 'dotenv'
+import * as fs from 'node:fs'
+import path from 'node:path'
+import { config, type DotenvParseOutput } from 'dotenv'
 import { z } from 'zod'
 
 const positiveIntegerEnv = z.coerce.number().int().positive()
@@ -72,11 +74,19 @@ export const createAppConfig = (env: DotenvParseOutput): AppConfig => {
 }
 
 export const loadAppConfig = (): AppConfig => {
-  const result = loadDotenv({
-    path: ['.env.local', '.env'],
-  })
+  const envPath = ['.env.local', '.env']
+    .map((file) => path.resolve(process.cwd(), file))
+    .find((file) => fs.existsSync(file))
+
+  if (!envPath) {
+    throw new Error('.env.local or .env file not found')
+  }
+
+  const result = config({ path: envPath })
 
   if (result.error !== undefined || result.parsed === undefined) {
+    console.log(result.error)
+
     throw new Error('Config file not found')
   }
 

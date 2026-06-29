@@ -14,20 +14,6 @@ const baseEvents: CarStateEvent[] = [
 ]
 
 describe('createCarStateAggregator', () => {
-  it('distinguishes startup with no telemetry from a stale stream', () => {
-    const aggregator = createCarStateAggregator({
-      carId: 1,
-      batteryCount: 2,
-      staleAfterMs: 15_000,
-    })
-
-    expect(aggregator.hasReceivedTelemetry()).toBe(false)
-
-    aggregator.ingest({ kind: 'latitude', carId: 1, value: 50.087 }, 1_000)
-
-    expect(aggregator.hasReceivedTelemetry()).toBe(true)
-  })
-
   it('withholds snapshots until the car state is complete', () => {
     const aggregator = createCarStateAggregator({
       carId: 1,
