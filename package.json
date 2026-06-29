@@ -6,7 +6,7 @@
     "writer": "tsx src/writer.ts",
     "all": "tsx src/collector.ts && tsx src/writer.ts"
   },
-  "packageManager": "pnpm@10.7.1",
+  "packageManager": "pnpm@11.9.0",
   "dependencies": {
     "tsx": "^4.19.4"
   }
